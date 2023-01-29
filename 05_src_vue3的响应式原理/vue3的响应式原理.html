@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>vue3响应式原理</title>
+</head>
+
+<body>
+    <script>
+        let person = {
+            name: "lili",
+            age: 18
+        }
+
+        // vue2中实现响应式
+        // 存在问题：1.新增删除属性时界面不会更新； 2.直接通过数组下标修改数组，界面不会自动更新(可以通过splice()方法解决)
+        // vue2中通过Vue.set()或this.$set()新增属性--this.$set(this.person, "sex", "女")
+        // vue2中通过Vue.delete()或this.$delte()新增属性--this.$delete(this.person, "sex", "女")
+        //#region 
+        /*         let p = {}
+                Object.defineProperty(p, "name", {
+                    // 获取p里面的name属性时调用
+                    get() {
+                        return person.name
+                    },
+                    // 修改p里面的name属性时调用
+                    set(value) {
+                        console.log(`有人修改了name属性，通知页面更新`)
+                        person.name = value
+                    }
+                })
+
+                Object.defineProperty(p, "age", {
+                    configurable: true, //可删除p身上的属性
+                    // 获取p里面的name属性时调用
+                    get() {
+                        return person.age
+                    },
+                    // 修改p里面的name属性时调用
+                    set(value) {
+                        console.log(`有人修改了age属性，通知页面更新`)
+                        person.age = value
+                    }
+                }) */
+        //#endregion
+
+        // vue3中实现响应式
+        // 原理：
+        // 1. 通过Proxy（代理），拦截对象中任意属性的变化，包括属性值的读写、添加、删除、修改
+        // 2. 通过Reflict（反射），对被代理对象的属性进行操作
+        //#region 
+        /* const p = new Proxy(person, {
+            // target：检测的对象person
+            // propName：获取的属性
+            get(target, propName) {
+                console.log(`获取${propName}属性`)
+                // return target[propName]
+                return Reflect.get(target,propName)
+            },
+            // value：修改属性的值
+            set(target, propName, value) {
+                console.log(`修改或追加${propName}属性，值为${value}`)
+                // target[propName] = value
+                Reflect.set(target, propName, value)
+            },
+            deleteProperty(target, propName) {
+                console.log(`删除了${propName}属性`)
+                // return delete target[propName]
+                return Reflect.deleteProperty(target, propName)
+            }
+        }) */
+        //#endregion
+    </script>
+</body>
+
+</html>
